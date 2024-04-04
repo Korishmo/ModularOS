@@ -464,6 +464,37 @@ function lang(id) {
     setText("MOS.Appstore.Music.Text.1", "вемим");
     setText("MOS.Music.Background", "вемим");
     setText("MOS.Settings.Background", "вене;п");
+  } else if (id == 5) {
+    //[зъ тъзюэбъ] 
+    setText("MOS.Settings.Languages.Background", "{ъчъп;зъ}");
+    setText("MOS.Settings.Button.1", "{ъчъп;юдвхп}");
+    setText("MOS.Settings.Button.2", "{фэтх}");
+    setText("MOS.Settings.Button.3", "{фдпбъ}");
+    setText("MOS.Settings.Customizer.Background", "{дпбшюдюш;эьэбхп}");
+    setText("MOS.Settings.Customizer.Label.1", "{дфэюэвх бх}");
+    setText("MOS.Settings.Customizer.Label.2", "{чдз бътхндзз}");
+    setText("MOS.Settings.Customizer.Label.3", "{дфэюэвх бътхндзз");
+    setText("MOS.Settings.Modules.Background", "{ъчъп;цдзфэз}");
+    setText("MOS.Settings.Advanced.Background", "{ъчъп;ндьхпз бъюдзз}");
+    setText("MOS.Settings.Advanced.Button.1", "{чдзбд;эьэбхп фдпбъ}");
+    setText("MOS.Settings.Advanced.Button.2", "{ъчъп;яътш ндядп}");
+    setText("MOS.Settings.Advanced.Button.3", "{ъчъп;цдзфэз}");
+    setText("MOS.Settings.Advanced.Button.4", "{ъчъп;зъ}");
+    setText("MOS.Settings.Modules.Mod1", "{ъчъп;юдвхп}");
+    setText("MOS.Settings.Modules.Mod2", "{яътш ндядп}");
+    setText("MOS.Settings.Modules.Mod3", "{вдцхзп ъчъп;ндьхпз}");
+    setText("MOS.Settings.Modules.Mod4", "{вдцхзп яътш}");
+    setText("MOS.Settings.Modules.Mod5", "{дпбшюдюш;вштэ цдзфэз}");
+    setText("MOS.Appstore.Music.Text.1", "{фхзтдчэп}");
+    setText("MOS.Music.Song.Stop", "{фхзтдчэп яъзюх}");
+    setText("MOS.Settings.OOSErr.Background", "{вэвъ цш}тшз ,{ъчъп;яътш ндядп}");
+    setText("MOS.Settings.OOSManager.Background", "{вэвъ цш}тшз ,{ъчъп;яътш ндядп}");
+    setText("MOS.Settings.OOS.Background", "{вэвъ цш}тшз ,{ъчъп;яътш ндядп}");
+    setText("MOS.Settings.OOSS1.Background", "{вэвъ цш}тшз ,{ъчъп;яътш ндядп}");
+    setText("MOS.Appstore.Background", "{ьшззбшзз вдцхзп}");
+    setText("MOS.Appstore.Music.Text.1", "{фхзтдчэп}");
+    setText("MOS.Music.Background", "{фхзтдчэп}");
+    setText("MOS.Settings.Background", "{ъчъп;ндьхпз}");
   } else {
     
   }
