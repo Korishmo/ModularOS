@@ -13,23 +13,10 @@ var OOSTerminal = "";
 var ISOOS = 0;
 var OOSSetUp = 0;
 var SCR = "MOS.Boot";
-//DO NOT MODIFY!
+//Funcs
 function Errservice(errcode) {
-  if (errcode == 1) {
-    return "Fatal system error";
-  } else if (errcode == 2) {
-    return "Fatal appstore error";
-  } else if (errcode == 3) {
-    return "Fatal settings error";
-  } else if (errcode == 4) {
-    return "Fatal music error";
-  } else if ((errcode == 5)) {
-    return "App doesn't exist";
-  } else if ((errcode == 6)) {
-    return "Missing data";
-  } else if ((errcode == 7)) {
-    return "Not avaliable";
-  }
+  var list = ["General Fault", "Fatal system error", "Fatal appstore error", "Fatal settings error", "Fatal music error", "App doesn't exist", "Required data non-existent", "Not avaliable"];
+  return (list[errcode]);
 }
 function Supersetscreen(scr) {
   SCR = scr;
