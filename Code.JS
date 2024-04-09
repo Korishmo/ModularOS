@@ -1,11 +1,9 @@
 //MOS
 var Version = 0;
 var Subversion = 2;
-var Subsubversion = 3;
-var Subsubsubversion = 0;
-var VersionText = ((((((("Version " + Version) + ".") + Subversion) + ".") + Subsubversion + "." + Subsubsubversion) + "\n Build ") + "15") + "";
-var MusicID = 2;
-var Apps = ["Settings", "App Store"];
+var Subsubversion = 4;
+var build = 1;
+var FullVersion = (((((((((Version + ".") + Subversion) + ".") + Subsubversion) + "") + "") + "") + "") + "-") + build;
 var Beta = 1;
 var OOSHome = "";
 var OOSTerminalSetUp = 0;
@@ -13,6 +11,7 @@ var OOSTerminal = "";
 var ISOOS = 0;
 var OOSSetUp = 0;
 var SCR = "MOS.Boot";
+batt = 100;
 //Funcs
 function Errservice(errcode) {
   var list = ["General Fault", "Fatal system error", "Fatal appstore error", "Fatal settings error", "Fatal music error", "App doesn't exist", "Required data non-existent", "Not avaliable"];
@@ -26,12 +25,13 @@ function Supersetscreen(scr) {
 //Boot Modular-OS 
 MOSBoot();
 timedLoop(100, function() {
+  debuggerr();
   twentyfourhourtime = getProperty("MOS.Settings.Customizer.Scale.24Hour.Time.Output", "index");
   setText("MOS.Homescreen.Time", (((SOA.gettime(twentyfourhourtime) + "           ") + batt + "%") + "         ") + SOA.getdate());
   lid = getProperty("MOS.Language", "index") + 0;
   lang(lid);
   if (Beta == 1) {
-    setText("MOS.Settings.About.Background", ("About \n \n \n" + VersionText) + "\n Beta Build .idex-1" + "\n \n This OS is made with open source projects like SOA!");
+    setText("MOS.Settings.About.Background", (("About \n \n \n" + "Version ") + FullVersion) + "\n Beta Build .idex-1" + "\n \n This OS is made with open source projects like SOA!");
   } else {
     setText("MOS.Settings.About.Background", ("About \n \n \n" + VersionText) +  "\n \n This OS is made with open source projects like SOA!");
   }
@@ -48,13 +48,19 @@ function batteries() {
 function MOSBoot() {
   setTimeout(function() {
     Supersetscreen("MOS.Homescreen");
-    console.log("Korishmo Technology Pre-release Operating System Modular-OS " + Version + "."+Subversion+"."+Subsubversion);
-    console.log("This tool is only for developers, if someone asked to type something here, it could make your device unbootable");
     showElement("MOS.Homescreen.icon.1");
     showElement("MOS.Homescreen.icon.2");
+    showElement("MOS.Homescreen.icon.4");
     setProperty("MOS.Homescreen.icon.1", "image", "icon://fa-cogs");
     setProperty("MOS.Homescreen.icon.2", "image", "icon://fa-download");
+    setProperty("MOS.Homescreen.icon.4", "image", "icon://fa-lightbulb-o");
   }, 370);
+}
+function debuggerr() {
+  console.clear();
+  console.log("-------------------------------Debugger-------------------------------");
+  console.log((("   Time Of Day: " + SOA.gettime(1)) + "                                                                                   Date: ") + SOA.getdate());
+  console.log((("   User ID: " + getUserId()) + "                                      Version: ") + FullVersion);
 }
 //Open Apps (Icons)
 onEvent("MOS.Homescreen.icon.1", "click", function( ) {
@@ -65,6 +71,13 @@ onEvent("MOS.Homescreen.icon.2", "click", function( ) {
 });
 onEvent("MOS.Homescreen.icon.3", "click", function( ) {
   Supersetscreen("MOS.Music");
+});
+onEvent("MOS.Homescreen.icon.4", "click", function( ) {
+  Supersetscreen("MOS.Tips");
+});
+//MOS.Tips
+onEvent("MOS.Tips.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.Homescreen");
 });
 //Close Apps (Bars)
 onEvent("MOS.Settings.Bar.Back", "click", function( ) {
