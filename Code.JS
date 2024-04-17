@@ -1,8 +1,8 @@
 //MOS
 var Version = 0;
-var Subversion = 4;
+var Subversion = 5;
 var Subsubversion = 0;
-var build = 1;
+var build = 2;
 var FullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "-") + build;
 var nbFullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "") + "";
 var SCR = "MOS.Boot";
@@ -14,6 +14,7 @@ var icon4 = "";
 var icon5 = "";
 var icon6 = "";
 var icon7 = "";
+var icon8 = "";
 var lid = getProperty("MOS.Language", "index") + -1;
 var errors = [];
 var OOSBoot = "";
@@ -79,6 +80,10 @@ function MOSBoot() {
   installapp("Appstore", "icon://fa-download");
   installapp("Tips", "icon://fa-lightbulb-o");
   setTimeout(function() {
+    if (TestFeatures == 1) {
+      showElement("MOS.Advanced.Button.2");
+      installapp("Tests", "icon://fa-bug");
+    }
     if (AdvancedApp == 1) {
       installapp("Advanced", "icon://fa-code");
     }
@@ -91,11 +96,13 @@ function MOSBoot() {
 }
 timedLoop(100, function() {
   //flags
+  if (OOSAllowed==0) {
+    hideElement("MOS.Advanced.Button.2");
+  } else {
+    showElement("MOS.Advanced.Button.2");
+  }
   if (Debugg==1) {
     debuggerr();
-  }
-  if (TestFeatures==1) {
-    installapp("Tests", "icon://fa-bug");
   }
   if (AdvancedSettings == 1) {
     showElement("MOS.Settings.Button.3");
@@ -123,11 +130,6 @@ function StatusBar() {
   setText("MOS.Settings.Advanced.Time", Text);
   setText("MOS.Settings.Customizer.Time", Text);
   setText("MOS.Settings.Wallpapers.Time", Text);
-  setText("MOS.Settings.OOSError.Time", Text);
-  setText("MOS.Settings.OOSManager.Time", Text);
-  setText("MOS.Settings.OOS.Configurator.Time", Text);
-  setText("MOS.Settings.OtherOSSetup0.Time", Text);
-  setText("MOS.Settings.OOSS1.Time", Text);
   setText("MOS.Settings.Modules.Time", Text);
   setText("MOS.Settings.Languages.Time", Text);
   setText("MOS.Tips.Time", Text);
@@ -139,6 +141,9 @@ function StatusBar() {
   setText("MOS.Tests.Time", Text);
   setText("MOS.Advanced.Time", Text);
   setText("MOS.Advanced.DebugLog.Time", Text);
+  setText("MOS.OOS2.Setup.1.Time", Text);
+  setText("MOS.OOS2.Setup.2.Time", Text);
+  setText("MOS.OOS2.Menu.Time", Text);
 }
 function debuggerr() {
   console.clear();
@@ -174,6 +179,9 @@ function batteries() {
     batt = batt - 1;
   });
 }
+onEvent("MOS.Lock.Bar.1", "click", function( ) {
+  Supersetscreen("MOS.Homescreen");
+});
 //MOS.Homescreen
 function openapp(icon) {
   if (icon == "Tips") {
@@ -192,6 +200,8 @@ function openapp(icon) {
     Supersetscreen("MOS.Tests");
   } else if (icon == "Advanced") {
     Supersetscreen("MOS.Advanced");
+  } else if (icon == "Virusscanner") {
+    
   } else {
     err(8);
   }
@@ -217,6 +227,9 @@ onEvent("MOS.Homescreen.icon.6", "click", function( ) {
 onEvent("MOS.Homescreen.icon.7", "click", function( ) {
   openapp(icon7);
 });
+onEvent("MOS.Homescreen.icon.8", "click", function( ) {
+  openapp(icon8);
+});
 //MOS.Tests
 onEvent("MOS.Tests.Bar.Back", "click", function( ) {
   Supersetscreen("MOS.Homescreen");
@@ -225,10 +238,14 @@ showElement("MOS.Tests.Button.1");
 showElement("MOS.Tests.Button.2");
 hideElement("MOS.Tests.Button.3");
 onEvent("MOS.Tests.Button.1", "click", function( ) {
-  Supersetscreen("MOS.Advanced");
+  Supersetscreen("MOS.Accounts");
 });
 onEvent("MOS.Tests.Button.2", "click", function( ) {
-  Supersetscreen("MOS.OOS2.Setup.1");
+  if (OOSSetUp == 1) {
+    Supersetscreen("MOS.OOS2.Menu");
+  } else {
+    Supersetscreen("MOS.OOS2.Setup.1");
+  }
 });
 onEvent("MOS.Tests.Button.3", "click", function( ) {
   
@@ -245,7 +262,11 @@ onEvent("MOS.Advanced.Button.1", "click", function( ) {
   }
 });
 onEvent("MOS.Advanced.Button.2", "click", function( ) {
-  Supersetscreen("MOS.OOS2.Setup.1");
+  if (OOSSetUp == 1) {
+    Supersetscreen("MOS.OOS2.Menu");
+  } else {
+    Supersetscreen("MOS.OOS2.Setup.1");
+  }
 });
 onEvent("MOS.Advanced.Button.3", "click", function( ) {
   var logpluserr = Log + "***" + errors;
@@ -267,6 +288,26 @@ function Logg(data) {
 onEvent("MOS.OOS2.Setup.1.Bar.Back", "click", function( ) {
   Supersetscreen("MOS.Advanced");
 });
+onEvent("MOS.OOS2.Setup.1.Button.1", "click", function( ) {
+  Supersetscreen("MOS.OOS2.Setup.2");
+});
+//MOS.OOS2.Setup.2
+onEvent("MOS.OOS2.Setup.2.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.OOS2.Setup.1");
+});
+onEvent("MOS.OOS2.Setup.2.Button.1", "click", function( ) {
+  OOSSetUp = 1;
+  OOSBoot = getText("MOS.OOS2.Setup.2.Input.1");
+  Supersetscreen("MOS.OOS2.Menu");
+});
+//MOS.OOS2.Menu
+hideElement("MOS.OOS2.Menu.Button.1");
+onEvent("MOS.OOS2.Menu.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.Advanced");
+});
+onEvent("MOS.OOS2.Menu.Button.4", "click", function( ) {
+  eval(OOSBoot);
+});
 //MOS.Tips / MOS.Notes
 onEvent("MOS.Tips.Bar.Back", "click", function( ) {
   Supersetscreen("MOS.Homescreen");
@@ -286,80 +327,6 @@ onEvent("MOS.Settings.Button.2", "click", function( ) {
 });
 onEvent("MOS.Settings.Button.3", "click", function( ) {
   Supersetscreen("MOS.Settings.Advanced");
-});
-//MOS.Settings.OOSS1
-onEvent("MOS.Settings.OOSS1.Bar.Back", "click", function( ) {
-  Supersetscreen("MOS.Settings");
-});
-onEvent("MOS.Settings.OOSS1.SetUp", "click", function( ) {
-  Supersetscreen("MOS.Settings.OOSManager");
-});
-onEvent("MOS.Settings.OOSS1.SetUp", "click", function( ) {
-Supersetscreen("MOS.Settings.OOSManager");
-OOSBoot = getText("MOS.HOS");
-OOSSetUp = 1;
-Logg("OOSSetUp");
-setText("MOS.Settings.OOS.Configurator.Setting2.Output", getText("MOS.HOS"));
-});
-onEvent("MOS.Settings.OOSS1.Bar.Back", "click", function( ) {
-Supersetscreen("MOS.Settings.Advanced");
-});
-//MOS.Settings.OOS
-onEvent("MOS.Settings.OOS.Bar.Back", "click", function( ) {
-  Supersetscreen("MOS.Settings.Advanced");
-});
-onEvent("MOS.Settings.OOS.SetUp", "click", function( ) {
-  Supersetscreen("MOS.Settings.OtherOSSetup1");
-});
-//MOS.Settings.OOSManager
-function BootOOS() {
-  eval(OOSBoot);
-}
-function ToOOSTerminal() {
-  if (OOSTerminalSetUp == 0) {
-    Supersetscreen("MOS.Settings.OOSError");
-    setText("MOS.Settings.OOSErr.Err", "You haven't set up terminal yet!");
-  } else {
-    Supersetscreen(OOSTerminal);
-  }
-}
-onEvent("MOS.Settings.OOSManager.Bar.Back", "click", function( ) {
-  OOSBoot = getText("MOS.HOS");
-  Supersetscreen("MOS.Settings.Advanced");
-});
-onEvent("MOS.Settings.OOSManager.RunOS", "click", function( ) {
-OOSBoot = getText("MOS.HOS");
-BootOOS();
-});
-onEvent("MOS.Settings.OOSManager.Help", "click", function( ) {
-Supersetscreen("MOS.Settings.OOSError");
-setText("MOS.Settings.OOSErr.Err", "WIP");
-});
-onEvent("MOS.Settings.OOSManager.Terminal", "click", function( ) {
-	ToOOSTerminal();
-});
-onEvent("MOS.Settings.OOSManager.Settings", "click", function( ) {
-	Supersetscreen("MOS.Settings.OOS.Configurator");
-});
-//MOS.Settings.OOSErr
-onEvent("MOS.Settings.OOSErr.OK", "click", function( ) {
-Supersetscreen("MOS.Settings.OOSManager");
-});
-onEvent("MOS.Settings.OOSErr.OK", "click", function( ) {
-	Supersetscreen("MOS.Settings.OOSManager");
-});
-//MOS.Settings.OOS.Configurator
-onEvent("MOS.Settings.OOS.Configurator.Bar.Back", "click", function( ) {
-	Supersetscreen("MOS.Settings.OOSManager");
-});
-onEvent("MOS.Settings.OOS.Configurator.Setting1.Output", "change", function( ) {
-	legacyMode = getChecked("MOS.Settings.OOS.Configurator.Setting1.Output");
-});
-onEvent("MOS.Settings.OOS.Configurator.Setting2.Output", "change", function( ) {
-	_001 = getText("MOS.Settings.OOS.Configurator.Setting2.Output");
-});
-onEvent("MOS.Settings.OOS.Bar.Back", "click", function( ) {
-Supersetscreen("MOS.Settings.Advanced");
 });
 //MOS.Settings.Advanced
 onEvent("MOS.Settings.Advanced.Button.1", "click", function( ) {
@@ -497,11 +464,6 @@ function wallpaper(img) {
   setProperty("MOS.Settings.Advanced", "image", img);
   setProperty("MOS.Settings.Customizer", "image", img);
   setProperty("MOS.Settings.Wallpapers", "image", img);
-  setProperty("MOS.Settings.OOSError", "image", img);
-  setProperty("MOS.Settings.OOSManager", "image", img);
-  setProperty("MOS.Settings.OOS.Configurator", "image", img);
-  setProperty("MOS.Settings.OtherOSSetup0", "image", img);
-  setProperty("MOS.Settings.OtherOSSetup1", "image", img);
   setProperty("MOS.Settings.Modules", "image", img);
   setProperty("MOS.Settings.Languages", "image", img);
   setProperty("MOS.Tips", "image", img);
@@ -514,6 +476,8 @@ function wallpaper(img) {
   setProperty("MOS.Advanced", "image", img);
   setProperty("MOS.Advanced.DebugLog", "image", img);
   setProperty("MOS.OOS2.Setup.1", "image", img);
+  setProperty("MOS.OOS2.Setup.2", "image", img);
+  setProperty("MOS.OOS2.Menu", "image", img);
 }
 //MOS.Settings.Modules
 onEvent("MOS.Settings.Modules.Mod1", "click", function( ) {
@@ -557,9 +521,10 @@ onEvent("MOS.Settings.Modules.Bar.Back", "click", function( ) {
 });
 //App.appstore
 onEvent("MOS.Appstore.Music.Install", "click", function( ) {
-  showElement("MOS.Appstore.Music.Uninstall");
-  hideElement("MOS.Appstore.Music.Install");
-  installapp("Music", "icon://fa-music");
+  if (installapp("Music", "icon://fa-music") == 1) {
+    showElement("MOS.Appstore.Music.Uninstall");
+    hideElement("MOS.Appstore.Music.Install");
+  }
 });
 onEvent("MOS.Appstore.Music.Uninstall", "click", function( ) {
   showElement("MOS.Appstore.Music.Install");
@@ -568,9 +533,10 @@ onEvent("MOS.Appstore.Music.Uninstall", "click", function( ) {
   deleteapp("Music");
 });
 onEvent("MOS.Appstore.Paint.Install", "click", function( ) {
-  showElement("MOS.Appstore.Paint.Uninstall");
-  hideElement("MOS.Appstore.Paint.Install");
-  installapp("Paint", "icon://fa-paint-brush");
+  if (installapp("Paint", "icon://fa-paint-brush") == 1) {
+    showElement("MOS.Appstore.Paint.Uninstall");
+    hideElement("MOS.Appstore.Paint.Install");
+  }
 });
 onEvent("MOS.Appstore.Paint.Uninstall", "click", function( ) {
   showElement("MOS.Appstore.Paint.Install");
@@ -578,9 +544,10 @@ onEvent("MOS.Appstore.Paint.Uninstall", "click", function( ) {
   deleteapp("Paint");
 });
 onEvent("MOS.Appstore.Notes.Install", "click", function( ) {
-  showElement("MOS.Appstore.Notes.Uninstall");
-  hideElement("MOS.Appstore.Notes.Install");
-  installapp("Notes", "icon://fa-sticky-note");
+  if (installapp("Notes", "icon://fa-sticky-note") == 1) {
+    showElement("MOS.Appstore.Notes.Uninstall");
+    hideElement("MOS.Appstore.Notes.Install");
+  }
 });
 onEvent("MOS.Appstore.Notes.Uninstall", "click", function( ) {
   showElement("MOS.Appstore.Notes.Install");
@@ -697,10 +664,6 @@ function lang(id) {
     setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
     setText("MOS.Settings.Modules.Mod2", "OOS"); //OOS
     setText("MOS.Settings.Advanced.Button.2", "Other OS"); //Other OS
-    setText("MOS.Settings.OOSErr.Background", "Other OS (1.1)"); //Other OS (1.1)
-    setText("MOS.Settings.OOSManager.Background", "Other OS (1.1)"); //Other OS (1.1)
-    setText("MOS.Settings.OOS.Background", "Other OS (1.1)"); //Other OS (1.1)
-    setText("MOS.Settings.OOSS1.Background", "Other OS (1.1)"); //Other OS (1.1)
     setText("MOS.Settings.Background", "Settings"); //settings
     setText("MOS.Appstore.Background", "App Store"); //app store
     setText("MOS.Appstore.Music.Text.1", "Music"); //music
@@ -853,10 +816,6 @@ function lang(id) {
     setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
     setText("MOS.Settings.Modules.Mod2", "[OOS]");//OOS
     setText("MOS.Settings.Advanced.Button.2", "{яътш ндядп}");//Other OS
-    setText("MOS.Settings.OOSErr.Background", "{вэвъ цш}тшз,{яътш ндядп}");//Other OS (1.1)
-    setText("MOS.Settings.OOSManager.Background", "{вэвъ цш}тшз,{яътш ндядп}");//Other OS (1.1)
-    setText("MOS.Settings.OOS.Background", "{вэвъ цш}тшз,{яътш ндядп}");//Other OS (1.1)
-    setText("MOS.Settings.OOSS1.Background", "{вэвъ цш}тшз,{яътш ндядп}");//Other OS (1.1)
     setText("MOS.Settings.Background", "{ж;ндьхпз}");//settings
     setText("MOS.Appstore.Background", "{ьшззбшзз вдцхзп}");//app store
     setText("MOS.Appstore.Music.Text.1", "{фхзтдчэп}");//music
@@ -867,38 +826,34 @@ function lang(id) {
     setText("MOS.Music.Background", "{фхзтдчэп}");//music
   } else if (id == 6) {
     //Phonemic English
-    setText("MOS.Settings.Languages.Background", "Làŋwajës");//Languages
-    setText("MOS.Settings.Advanced.Button.4", "Làŋwajës");//Languages
-    setText("MOS.Settings.Button.1", "Walpàpřs");//Wallpapers
-    setText("MOS.Settings.Wallpapers.Background", "Walpàpřs");//wallpapers
-    setText("MOS.Settings.Modules.Mod1", "Wälpàpřs");//Wallpapers
-    setText("MOS.Settings.Button.2", "Õbawt");//about 
-    setText("MOS.Settings.Button.3", "Ädvancd");//advanced
-    setText("MOS.Settings.Advanced.Button.1", "Ädvancd Cõßõmezàßõn");//Advanced customization
-    setText("MOS.Settings.Customizer.Background", "Cõßõmìzř");//customizer
-    setText("MOS.Settings.Customizer.Label.1", "Tëkst Skàl");//icon scale
-    setText("MOS.Settings.Customizer.Label.3", "Ikän siz");//icon size
-    setText("MOS.Settings.Customizer.Label.2", "Ikän kõlř");//icon color
-    setText("MOS.Settings.Modules.Background", "Mäduls");//modules
-    setText("MOS.Settings.Advanced.Background", "Dëvëlëpř äpßõns");//developer options
-    setText("MOS.Settings.Advanced.Button.3", "Mäduls");//modules
-    setText("MOS.Settings.Modules.Mod3", "Cõßõmìzř");//customizer
+    setText("MOS.Settings.Languages.Background", "Lāŋwajes");//Languages
+    setText("MOS.Settings.Advanced.Button.4", "Lāŋwajes");//Languages
+    setText("MOS.Settings.Button.1", "WälpāpŘs");//Wallpapers
+    setText("MOS.Settings.Wallpapers.Background", "WälpāpŘs");//wallpapers
+    setText("MOS.Settings.Modules.Mod1", "WälpāpŘs");//Wallpapers
+    setText("MOS.Settings.Button.2", "àbowt");//about 
+    setText("MOS.Settings.Button.3", "Ädvansd");//advanced
+    setText("MOS.Settings.Advanced.Button.1", "Ädvansd Kușomezāßõn");//Advanced customization
+    setText("MOS.Settings.Customizer.Background", "KușomizŘ");//customizer
+    setText("MOS.Settings.Customizer.Label.1", "Tëkș Skāl");//icon scale
+    setText("MOS.Settings.Customizer.Label.3", "Ikon Siz");//icon size
+    setText("MOS.Settings.Customizer.Label.2", "Ikon CõlŘ");//icon color
+    setText("MOS.Settings.Modules.Background", "Mädulz");//modules
+    setText("MOS.Settings.Advanced.Background", "DëvëlëpŘ Äpßõns");//developer options
+    setText("MOS.Settings.Advanced.Button.3", "Mädulz");//modules
+    setText("MOS.Settings.Modules.Mod3", "KușomizŘ");//customizer
     setText("MOS.Settings.Modules.Mod4", "System process"); //system process
     setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
-    setText("MOS.Settings.Modules.Mod2", "ÒÒËS");//OOS
-    setText("MOS.Settings.Advanced.Button.2", "Õþř ÕËS");//Other OS
-    setText("MOS.Settings.OOSErr.Background", "Õþř ÕËS (1.1)");//Other OS (1.1)
-    setText("MOS.Settings.OOSManager.Background", "Õþř ÕËS (1.1)");//Other OS (1.1)
-    setText("MOS.Settings.OOS.Background", "Õþř ÕËS (1.1)");//Other OS (1.1)
-    setText("MOS.Settings.OOSS1.Background", "Õþř ÕËS (1.1)");//Other OS (1.1)
-    setText("MOS.Settings.Background", "Sëtèŋs");//settings
-    setText("MOS.Appstore.Background", "Äp ẞœ");//app store
-    setText("MOS.Appstore.Music.Text.1", "Musèk");//music
-    setText("MOS.Appstore.Paint.Text.1", "Pànt");//paint
-    setText("MOS.Appstore.Notes.Text.1", "Nõts");//notes
-    setText("MOS.Notes.text.1", "Nõts");//notes
-    setText("MOS.Music.Song.Stop", "Stäp Musèk");//stop music
-    setText("MOS.Music.Background", "Musèk");//music
+    setText("MOS.Settings.Modules.Mod2", "OOS"); //OOS
+    setText("MOS.Settings.Advanced.Button.2", "Other OS"); //Other OS
+    setText("MOS.Settings.Background", "Settings"); //settings
+    setText("MOS.Appstore.Background", "App Store"); //app store
+    setText("MOS.Appstore.Music.Text.1", "Muzek");//music
+    setText("MOS.Appstore.Paint.Text.1", "Paint");//paint
+    setText("MOS.Appstore.Notes.Text.1", "Notes");//notes
+    setText("MOS.Notes.text.1", "Notes");//notes
+    setText("MOS.Music.Song.Stop", "Stop Muzek");//stop music
+    setText("MOS.Music.Background", "Muzek");//music
   } else {
     
   }
@@ -964,11 +919,15 @@ function installapp(appname, iconn, where) {
       setProperty("MOS.Homescreen.icon.7", "image", icon);
       showElement("MOS.Homescreen.icon.7");
       return 1;
+    } else if (icon8 == "") {
+      icon8 = appname;
+      setProperty("MOS.Homescreen.icon.8", "image", icon);
+      showElement("MOS.Homescreen.icon.8");
+      return 1;
     } else {
       console.log("Storage Full!");
       err(8);
       return 0;
-      
     }
     }
     }
@@ -994,6 +953,8 @@ function installapp(appname, iconn, where) {
       icon6 = appname;
     } else if ((where == 7)) {
       icon7 = appname;
+    } else if (where == 8) {
+      icon8 = appname;
     }
     setProperty("MOS.Homescreen.icon." + where , "image", icon);
     showElement("MOS.Homescreen.icon."+where);
@@ -1030,6 +991,10 @@ function deleteapp(appname) {
     icon7 = "";
     setProperty("MOS.Homescreen.icon.7", "image", "icon://fa-question");
     hideElement("MOS.Homescreen.icon.7");
+  } else if (icon8 == appname) {
+    icon8 = "";
+    setProperty("MOS.Homescreen.icon.8", "image", "icon://fa-question");
+    hideElement("MOS.Homescreen.icon.8");
   } else {
     err(8);
   }
