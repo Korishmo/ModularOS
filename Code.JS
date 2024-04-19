@@ -1,7 +1,7 @@
 //MOS
 var Version = 0;
 var Subversion = 6;
-var Subsubversion = 0;
+var Subsubversion = 1;
 var build = 1;
 var FullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "-") + build;
 var nbFullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "") + "";
@@ -323,7 +323,7 @@ onEvent("MOS.OOS2.Menu.Bar.Back", "click", function( ) {
   Supersetscreen("MOS.Advanced");
 });
 onEvent("MOS.OOS2.Menu.Button.4", "click", function( ) {
-  eval(OOSBoot);
+  Supersetscreen(OOSBoot);
 });
 //MOS.Tips / MOS.Notes
 onEvent("MOS.Tips.Bar.Back", "click", function( ) {
