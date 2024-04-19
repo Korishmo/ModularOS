@@ -1,8 +1,8 @@
 //MOS
 var Version = 0;
-var Subversion = 5;
+var Subversion = 6;
 var Subsubversion = 0;
-var build = 2;
+var build = 1;
 var FullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "-") + build;
 var nbFullVersion = (((((Version + ".") + Subversion) + ".") + Subsubversion) + "") + "";
 var SCR = "MOS.Boot";
@@ -33,22 +33,34 @@ SetFlags();
 function SetFlags() {
   //Don't Set Manually, Use KeyValues
   getKeyValue("TestFeatures", function (kTestFeatures) {
-    TestFeatures = kTestFeatures;
-  });
-  getKeyValue("Debugg", function (kDebugg) {
-    Debugg = kDebugg;
-  });
-  getKeyValue("AdvancedSettings", function (kAdvancedSettings) {
-    AdvancedSettings = kAdvancedSettings;
-  });
-  getKeyValue("AdvancedApp", function (kAdvancedApp) {
-    AdvancedApp = kAdvancedApp;
-  });
-  getKeyValue("OOSAllowed", function (kOOSAllowed) {
-    OOSAllowed = kOOSAllowed;
+    getKeyValue("Debugg", function (kDebugg) {
+      getKeyValue("AdvancedSettings", function (kAdvancedSettings) {
+        getKeyValue("AdvancedApp", function (kAdvancedApp) {
+          getKeyValue("OOSAllowed", function (kOOSAllowed) {
+            if (kTestFeatures == undefined) {
+              //if keys dont exist default to example settings
+              TestFeatures = 0;
+              Debugg = 1;
+              AdvancedSettings = 0;
+              AdvancedApp = 0;
+              OOSAllowed = 0;
+            }
+            TestFeatures = kTestFeatures;
+            Debugg = kDebugg;
+            AdvancedSettings = kAdvancedSettings;
+            AdvancedApp = kAdvancedApp;
+            OOSAllowed = kOOSAllowed;
+          });
+        });
+      });
+    });
   });
 }
 //Funcs
+function meow() {
+  installapp("Tests", "icon://fa-bug");
+  installapp("Advanced", "icon://fa-code");
+}
 function err(errcode) {
   var list = ["General Fault", "Fatal system error", "Fatal appstore error", "Fatal settings error", "Fatal music error", "App doesn't exist", "Required data non-existent", "Not avaliable", "SuperHomescreen Error"];
   errors[(errors.length + 1)] = list[errcode];
@@ -80,18 +92,19 @@ function MOSBoot() {
   installapp("Appstore", "icon://fa-download");
   installapp("Tips", "icon://fa-lightbulb-o");
   setTimeout(function() {
-    if (TestFeatures == 1) {
-      showElement("MOS.Advanced.Button.2");
-      installapp("Tests", "icon://fa-bug");
-    }
-    if (AdvancedApp == 1) {
-      installapp("Advanced", "icon://fa-code");
-    }
-    if (OOSAllowed == 1) {
-      Logg("OOS is Enabled");
-    }
+    setTimeout(function() {
+      if (TestFeatures == 1) {
+        installapp("Tests", "icon://fa-bug");
+      }
+      if (AdvancedApp == 1) {
+        installapp("Advanced", "icon://fa-code");
+      }
+      if (OOSAllowed == 1) {
+        Logg("OOS is Enabled");
+      }
+    }, 200);
     batteries();
-    Supersetscreen("MOS.Homescreen");
+    Supersetscreen("MOS.Lock");
   }, 500);
 }
 timedLoop(100, function() {
@@ -117,9 +130,9 @@ timedLoop(100, function() {
   lid = getProperty("MOS.Language", "index") + 0;
   twentyfourhourtime = getProperty("MOS.Settings.Customizer.Scale.24Hour.Time.Output", "index");
   if (AdvancedSettings == 1) {
-    setText("MOS.Settings.About.Background", ((("About \n \n \n" + "Version ") + nbFullVersion) + "\n") + "\n \n This OS is made with open source projects like SOA!");
-  } else {
     setText("MOS.Settings.About.Background", ((("About \n \n \n" + "Version ") + FullVersion) + "\n") + "\n \n This OS is made with open source projects like SOA!");
+  } else {
+    setText("MOS.Settings.About.Background", ((("About \n \n \n" + "Version ") + nbFullVersion) + "\n") + "\n \n This OS is made with open source projects like SOA!");
   }
 });
 function StatusBar() {
@@ -144,6 +157,10 @@ function StatusBar() {
   setText("MOS.OOS2.Setup.1.Time", Text);
   setText("MOS.OOS2.Setup.2.Time", Text);
   setText("MOS.OOS2.Menu.Time", Text);
+  setText("MOS.Accounts.Time", Text);
+  setText("MOS.Accounts.OTC.Time", Text);
+  setText("MOS.Accounts.Signin.Time", Text);
+  setText("MOS.Lock.Time", Text);
 }
 function debuggerr() {
   console.clear();
@@ -328,6 +345,9 @@ onEvent("MOS.Settings.Button.2", "click", function( ) {
 onEvent("MOS.Settings.Button.3", "click", function( ) {
   Supersetscreen("MOS.Settings.Advanced");
 });
+onEvent("MOS.Settings.Button.4", "click", function( ) {
+  Supersetscreen("MOS.Accounts");
+});
 //MOS.Settings.Advanced
 onEvent("MOS.Settings.Advanced.Button.1", "click", function( ) {
   Supersetscreen("MOS.Settings.Customizer");
@@ -478,6 +498,10 @@ function wallpaper(img) {
   setProperty("MOS.OOS2.Setup.1", "image", img);
   setProperty("MOS.OOS2.Setup.2", "image", img);
   setProperty("MOS.OOS2.Menu", "image", img);
+  setProperty("MOS.Accounts", "image", img);
+  setProperty("MOS.Accounts.OTC", "image", img);
+  setProperty("MOS.Accounts.Signin", "image", img);
+  setProperty("MOS.Lock", "image", img);
 }
 //MOS.Settings.Modules
 onEvent("MOS.Settings.Modules.Mod1", "click", function( ) {
@@ -556,6 +580,93 @@ onEvent("MOS.Appstore.Notes.Uninstall", "click", function( ) {
 });
 onEvent("MOS.Appstore.Bar.Back", "click", function( ) {
   Supersetscreen("MOS.Homescreen");
+});
+//MOS.Accounts
+onEvent("MOS.Accounts.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.Settings");
+});
+onEvent("MOS.Accounts.Button.1", "click", function( ) {
+  Supersetscreen("MOS.Accounts.Signin");
+});
+onEvent("MOS.Accounts.Button.2", "click", function( ) {
+  Supersetscreen("MOS.Accounts.Manage");
+});
+onEvent("MOS.Accounts.Button.3", "click", function( ) {
+  Supersetscreen("MOS.Accounts.OTC");
+});
+//MOS.Accounts.Signin
+onEvent("MOS.Accounts.Signin.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.Accounts");
+});
+var loggedin = 0;
+var Username = "NULL";
+var encodedusrid = AES256.encrypt(getUserId(), getUserId());
+function signup(username, pass) {
+var usrnm = username.toLowerCase();
+if (usrnm != "") {
+  var encodedpass = AES256.encrypt(pass, getUserId());
+  createRecord("Accounts", {"lastloggedintime":(SOA.gettime(1)), lastloggedindate:(SOA.getdate()), username:usrnm,isdisabled:0, wallpaper:"meow", displayname:usrnm, epassword:encodedpass, isadmin:"0", onetimecode:"000000", userid:encodedusrid });
+}
+}
+function login(username, pass) {
+  var usrnm = username.toLowerCase();
+  if (usrnm != "") {
+    Supersetscreen("MOS.Boot");
+    readRecords("Accounts", {}, function(records) {
+      for (var i = 0; i < records.length; i++) {
+        if (records[i].username == usrnm) {
+          if (AES256.decrypt((records[i]).epassword, AES256.decrypt(encodedusrid, getUserId())) == pass) {
+            console.log("Logged in!");
+            loggedin = 1;
+            Username = usrnm;
+            updateRecord("Accounts", {id:(i+1), "lastloggedintime":(SOA.gettime(1)), lastloggedindate:(SOA.getdate()), username:records[i].username,isdisabled:records[i].isdisabled, wallpaper:records[i].wallpaper, displayname:records[i].displayname, epassword:(records[i].epassword), isadmin:records[i].isadmin, onetimecode:records[i].onetimecode, userid:records[i].userid });
+            if (records[i].isadmin == 1) {
+              meow();
+            }
+            Supersetscreen("MOS.Accounts");
+            setText("MOS.Accounts.OTC.Text.1", records[i].onetimecode);
+            setText("MOS.Accounts.Signin.Input.2", "");
+            showElement("MOS.Accounts.Button.3");
+          } else if (records[i].onetimecode == pass) {
+            console.log("Logged in!");
+            loggedin = 1;
+            Username = usrnm;
+            updateRecord("Accounts", {id:(i+1), "lastloggedintime":(SOA.gettime(1)), lastloggedindate:(SOA.getdate()), username:records[i].username,isdisabled:records[i].isdisabled, wallpaper:records[i].wallpaper, displayname:records[i].displayname, epassword:(records[i].epassword), isadmin:records[i].isadmin, onetimecode:records[i].onetimecode, userid:records[i].userid });
+            if (records[i].isadmin == 1) {
+              meow();
+            }
+            Supersetscreen("MOS.Accounts");
+            setText("MOS.Accounts.OTC.Text.1", records[i].onetimecode);
+            setText("MOS.Accounts.Signin.Input.2", "");
+            showElement("MOS.Accounts.Button.3");
+          } else {
+            Supersetscreen("MOS.Accounts.Signin");
+            setText("MOS.Accounts.Signin.Text.1", "Incorrect pass/otc");
+          }
+        }
+      }
+    });
+  }
+}
+onEvent("MOS.Accounts.Signin.Button.1", "click", function( ) {
+  login(getText("MOS.Accounts.Signin.Input.1"), getText("MOS.Accounts.Signin.Input.2"));
+});
+onEvent("MOS.Accounts.Signin.Button.2", "click", function( ) {
+  signup(getText("MOS.Accounts.Signin.Input.1"), getText("MOS.Accounts.Signin.Input.2"));
+});
+//MOS.Accounts.OTC
+onEvent("MOS.Accounts.OTC.Bar.Back", "click", function( ) {
+  Supersetscreen("MOS.Accounts");
+});
+onEvent("MOS.Accounts.OTC.Button.1", "click", function( ) {
+  readRecords("Accounts", {}, function(records) {
+    for (var i = 0; i < records.length; i++) {
+      if (records[i].username == Username) {
+        updateRecord("Accounts", {id:(i+1), "lastloggedintime":(SOA.gettime(1)), lastloggedindate:(SOA.getdate()), username:records[i].username,isdisabled:records[i].isdisabled, wallpaper:records[i].wallpaper, displayname:records[i].displayname, epassword:(records[i].epassword), isadmin:records[i].isadmin, onetimecode:(randomNumber(111111, 999999)), userid:records[i].userid });
+        setText("MOS.Accounts.OTC.Text.1", records[i].onetimecode);
+      }
+    }
+  });
 });
 //MOS.Music
 onEvent("MOS.Music.Bar.Back", "click", function( ) {
