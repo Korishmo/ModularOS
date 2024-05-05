@@ -1,6 +1,6 @@
 //MOS
-var Version = 0;
-var Subversion = 9;
+var Version = 1;
+var Subversion = 0;
 var Subsubversion = 0;
 var build = 1;
 //R:Release, I:Internal
@@ -52,7 +52,6 @@ function ssetscreen(scr) {
 }
 //Boot Modular-OS 
 function SetFlags() {
-  //Don't Set Manually, Use KeyValues
   getKeyValue("TestFeatures", function (kTestFeatures) {
     getKeyValue("Debugg", function (kDebugg) {
       getKeyValue("AdvancedSettings", function (kAdvancedSettings) {
@@ -76,6 +75,7 @@ function SetFlags() {
                 
               });
             }
+            //Don't Set Manually, Use KeyValues
             TestFeatures = kTestFeatures;
             Debugg = kDebugg;
             AdvancedApp = kAdvancedApp;
@@ -94,7 +94,7 @@ function MOSBoot() {
     PermText("Congragulations you have been selected for MOS Test Features!");
   }
   ssetscreen("MOS.Boot");
-  wallpaper("Best-iOS-17-wallpapers-1-1-scaled-(1).jpg");
+  wallpaper("https://9to5mac.com/wp-content/uploads/sites/6/2022/06/WWDC22.png");
   installapp("Settings", "icon://fa-cogs");
   installapp("Appstore", "icon://fa-download");
   installapp("Tips", "icon://fa-lightbulb-o");
@@ -109,7 +109,7 @@ function MOSBoot() {
       Logg("OOS is Enabled");
     }
     batteries();
-    ssetscreen("MOS.Lock");
+    ssetscreen("MOS.Setup1");
   }, 500);
 }
 timedLoop(100, function() {
@@ -146,6 +146,8 @@ function StatusBar() {
   } else {
     var Text = "  " + ((((SOA2.gettime(twentyfourhourtime) + "           ") + batt + "%") + "        ") + SOA2.getdate());
   }
+  setText("MOS.Lock.Time2", SOA2.gettime(twentyfourhourtime));
+  setText("MOS.Lock.Time", Text);
   setText("MOS.Homescreen.Time", Text);
   setText("MOS.Settings.Time", Text);
   setText("MOS.Settings.About.Time", Text);
@@ -171,7 +173,7 @@ function StatusBar() {
   setText("MOS.Accounts.Time", Text);
   setText("MOS.Accounts.OTC.Time", Text);
   setText("MOS.Accounts.Signin.Time", Text);
-  setText("MOS.Lock.Time", Text);
+  setText("MOS.Setup1.Time", Text);
 }
 function debuggerr() {
   console.clear();
@@ -207,6 +209,9 @@ function batteries() {
     batt = batt - 1;
   });
 }
+onEvent("MOS.Setup1.Bar.Next", "click", function( ) {
+  ssetscreen("MOS.Lock");
+});
 onEvent("MOS.Lock.Bar.1", "click", function( ) {
   ssetscreen("MOS.Homescreen");
 });
@@ -530,7 +535,7 @@ onEvent("MOS.Settings.Wallpapers.Wallpaper.09", "click", function( ) {
   wallpaper("https://th.bing.com/th/id/OIP.2Oj1AiatJjMxRKbeqOPfgwHaNK?rs=1&pid=ImgDetMain");
 });
 onEvent("MOS.Settings.Wallpapers.Wallpaper.10", "click", function( ) {
-  wallpaper("https://th.bing.com/th/id/OIP.UVuzXhrvLU_wt8IB1KRRCgHaQB?rs=1&pid=ImgDetMain");
+  wallpaper("https://9to5mac.com/wp-content/uploads/sites/6/2022/06/WWDC22.png");
 });
 onEvent("MOS.Settings.Wallpapers.Wallpaper.11", "click", function( ) {
   wallpaper("https://mymind.com/wp-content/uploads/2021/07/cover_New-Feature_-A-Focus-Mode-for-your-mind-notes.png");
@@ -583,6 +588,8 @@ function wallpaper(img) {
   setProperty("MOS.Accounts.OTC", "image", img);
   setProperty("MOS.Accounts.Signin", "image", img);
   setProperty("MOS.Lock", "image", img);
+  setProperty("MOS.Setup1", "image", img);
+  setProperty("SOA.BIOS", "image", img);
 }
 //MOS.Settings.Modules
 onEvent("MOS.Settings.Modules.Mod1", "click", function( ) {
@@ -841,221 +848,103 @@ onEvent("MOS.Settings.Languages.Bar.Back", "click", function( ) {
 });
 //Sets the language to OOS
 function lang(id) {
-  if (id == 0) {
-    //English
-    setText("MOS.Settings.Languages.Background", "Languages"); //Languages
-    setText("MOS.Settings.Advanced.Button.4", "Languages"); //Languages
-    setText("MOS.Settings.Button.1", "Wallpapers"); //Wallpapers
-    setText("MOS.Settings.Wallpapers.Background", "Wallpapers");//wallpapers
-    setText("MOS.Settings.Modules.Mod1", "Wallpapers"); //Wallpapers
-    setText("MOS.Settings.Button.2", "About"); //about 
-    setText("MOS.Settings.Button.3", "Advanced"); //advanced
-    setText("MOS.Settings.Advanced.Button.1", "Advanced Customization"); //Advanced customization
-    setText("MOS.Settings.Customizer.Background", "Customizer"); //customizer
-    setText("MOS.Settings.Customizer.Label.1", "Text Scale"); //icon scale
-    setText("MOS.Settings.Customizer.Label.3", "Icon Size"); //icon size
-    setText("MOS.Settings.Customizer.Label.2", "Icon Color"); //icon color
-    setText("MOS.Settings.Modules.Background", "Modules"); //modules
-    setText("MOS.Settings.Advanced.Background", "Developer Options"); //developer options
-    setText("MOS.Settings.Advanced.Button.3", "Modules"); //modules
-    setText("MOS.Settings.Modules.Mod3", "Customizer"); //customizer
-    setText("MOS.Settings.Modules.Mod4", "System process"); //system process
-    setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
-    setText("MOS.Settings.Modules.Mod2", "OOS"); //OOS
-    setText("MOS.Settings.Advanced.Button.2", "Other OS"); //Other OS
-    setText("MOS.Settings.Background", "Settings"); //settings
-    setText("MOS.Appstore.Background", "App Store"); //app store
-    setText("MOS.Appstore.Music.Text.1", "Music"); //music
-    setText("MOS.Appstore.Paint.Text.1", "Paint");//paint
-    setText("MOS.Appstore.Notes.Text.1", "Notes");//notes
-    setText("MOS.Notes.text.1", "Notes");//notes
-    setText("MOS.Music.Song.Stop", "Stop Music"); //stop music
-    setText("MOS.Music.Background", "Music"); //music
-  } else if ((id == 1)) {
-    //Spanish
-    setText("MOS.Settings.Background", "Idiomas");
-    setText("MOS.Settings.Button.1", "Fondos de pantalla");
-    setText("MOS.Settings.Button.2", "Acerca de");
-    setText("MOS.Settings.Button.3", "Avanzado");
-    setText("MOS.Settings.Customizer.Background", "Personalizador");
-    setText("MOS.Settings.Customizer.Label.1", "Escala de texto");
-    setText("MOS.Settings.Customizer.Label.2", "Color del icono");
-    setText("MOS.Settings.Customizer.Label.3", "Tamaño del icono");
-    setText("MOS.Settings.Modules.Background", "Módulos");
-    setText("MOS.Settings.Advanced.Background", "Opciones de desarrollador");
-    setText("MOS.Settings.Advanced.Button.1", "Personalización avanzada");
-    setText("MOS.Settings.Advanced.Button.2", "Otros sistemas operativos");
-    setText("MOS.Settings.Advanced.Button.3", "Módulos");
-    setText("MOS.Settings.Advanced.Button.4", "Idiomas");
-    setText("MOS.Settings.Modules.Mod1", "Fondos de pantalla");
-    setText("MOS.Settings.Modules.Mod2", "OOS");
-    setText("MOS.Settings.Modules.Mod3", "Aplicación de configuración");
-    setText("MOS.Settings.Modules.Mod4", "Proceso del sistema");
-    setText("MOS.Settings.Modules.Mod5", "Buscador de módulos");
-    setText("MOS.Appstore.Music.Text.1", "Música");
-    setText("MOS.Music.Song.Stop", "Detener música");
-    setText("MOS.Settings.OOSErr.Background", "Otros sistemas operativos (Beta)");
-    setText("MOS.Settings.OOSManager.Background", "Otros sistemas operativos (Beta)");
-    setText("MOS.Settings.OOS.Background", "Otros sistemas operativos (Beta)");
-    setText("MOS.Settings.OOSS1.Background", "Otros sistemas operativos (Beta)");
-    setText("MOS.Appstore.Background", "App Store");
-    setText("MOS.Appstore.Music.Text.1", "Música");
-    setText("MOS.Music.Background", "Música");
-    setText("MOS.Appstore.Background", "Tienda de aplicaciones");
-  } else if (id == 2) {
-    setText("MOS.Settings.Background", "Magasin d'applications");
-    setText("MOS.Settings.Languages.Background", "Langues");
-    setText("MOS.Settings.Button.1", "Fonds d'écran");
-    setText("MOS.Settings.Button.2", "À propos");
-    setText("MOS.Settings.Button.3", "Avancé");
-    setText("MOS.Settings.Customizer.Background", "Customizer");
-    setText("MOS.Settings.Customizer.Label.1", "Échelle du texte");
-    setText("MOS.Settings.Customizer.Label.2", "Couleur de l'icône");
-    setText("MOS.Settings.Customizer.Label.3", "Taille de l'icône");
-    setText("MOS.Settings.Modules.Background", "Modules");
-    setText("MOS.Settings.Advanced.Background", "Options du développeur");
-    setText("MOS.Settings.Advanced.Button.1", "Personnalisation avancée");
-    setText("MOS.Settings.Advanced.Button.2", "Autres systèmes d'exploitation");
-    setText("MOS.Settings.Advanced.Button.3", "Modules");
-    setText("MOS.Settings.Advanced.Button.4", "Langues");
-    setText("MOS.Settings.Modules.Mod1", "Fonds d'écran");
-    setText("MOS.Settings.Modules.Mod2", "OOS");
-    setText("MOS.Settings.Modules.Mod3", "Application Paramètres");
-    setText("MOS.Settings.Modules.Mod4", "Processus système");
-    setText("MOS.Settings.Modules.Mod5", "Recherche de modules");
-    setText("MOS.Appstore.Music.Text.1", "Musique");
-    setText("MOS.Music.Song.Stop", "Arrêter la musique");
-    setText("MOS.Settings.OOSErr.Background", "Autres systèmes d'exploitation (bêta)");
-    setText("MOS.Settings.OOSManager.Background", "Autres systèmes d'exploitation (bêta)");
-    setText("MOS.Settings.OOS.Background", "Autres systèmes d'exploitation (bêta)");
-    setText("MOS.Settings.OOOSS1.Background", "Autres systèmes d'exploitation (bêta)");
-    setText("MOS.Appstore.Background", "App Store");
-    setText("MOS.Appstore.Music.Text.1", "Musique");
-    setText("MOS.Music.Background", "Musique");
-  } else if (id == 3) {
-    setText("MOS.Settings.Background", "アプリストア");
-    setText("MOS.Settings.Languages.Background", "言語");
-    setText("MOS.Settings.Button.1", "壁紙");
-    setText("MOS.Settings.Button.2", "概要");
-    setText("MOS.Settings.Button.3", "詳細");
-    setText("MOS.Settings.Customizer.Background", "カスタマイザー");
-    setText("MOS.Settings.Customizer.Label.1", "テキストスケール");
-    setText("MOS.Settings.Customizer.Label.2", "アイコンの色");
-    setText("MOS.Settings.Customizer.Label.3", "アイコンのサイズ");
-    setText("MOS.Settings.Modules.Background", "モジュール");
-    setText("MOS.Settings.Advanced.Background", "開発者向けオプション");
-    setText("MOS.Settings.Advanced.Button.1", "高度なカスタマイズ");
-    setText("MOS.Settings.Advanced.Button.2", "その他の OS");
-    setText("MOS.Settings.Advanced.Button.3", "モジュール");
-    setText("MOS.Settings.Advanced.Button.4", "言語");
-    setText("MOS.Settings.Modules.Mod1", "壁紙");
-    setText("MOS.Settings.Modules.Mod2", "OOS");
-    setText("MOS.Settings.Modules.Mod3", "設定アプリ");
-    setText("MOS.Settings.Modules.Mod4", "システムプロセス");
-    setText("MOS.Settings.Modules.Mod5", "モジュールファインダー");
-    setText("MOS.Appstore.Music.Text.1", "ミュージック");
-    setText("MOS.Music.Song.Stop", "音楽を停止");
-    setText("MOS.Settings.OOSErr.Background", "その他の OS (ベータ版)");
-    setText("MOS.Settings.OOSManager.Background", "その他の OS (ベータ版)");
-    setText("MOS.Settings.OOS.Background", "その他の OS (ベータ版)");
-    setText("MOS.Settings.OOSS1.Background", "その他の OS (ベータ版)");
-    setText("MOS.Appstore.Background", "App Store");
-    setText("MOS.Appstore.Music.Text.1", "ミュージック");
-    setText("MOS.Music.Background", "ミュージック");
-  } else if (id == 4) {
-    //Dock 2
-    setText("MOS.Settings.Languages.Background", "кавеР;п");
-    setText("MOS.Settings.Button.1", "титеР;п");
-    setText("MOS.Settings.Button.2", "кити");
-    setText("MOS.Settings.Button.3", "Шапа");
-    setText("MOS.Settings.Customizer.Background", "пиму;пе");
-    setText("MOS.Settings.Customizer.Label.1", "муР векам");
-    setText("MOS.Settings.Customizer.Label.2", "титеР мапе");
-    setText("MOS.Settings.Customizer.Label.3", "муР векам");
-    setText("MOS.Settings.Modules.Background", "патан;п");
-    setText("MOS.Settings.Advanced.Background", "тува тета;п");
-    setText("MOS.Settings.Advanced.Button.1", "Шапа пиму;пвоу");
-    setText("MOS.Settings.Advanced.Button.2", "мамин вемон;п");
-    setText("MOS.Settings.Advanced.Button.3", "патан;п");
-    setText("MOS.Settings.Advanced.Button.4", "кавеР;п");
-    setText("MOS.Settings.Modules.Mod1", "титеР;п");
-    setText("MOS.Settings.Modules.Mod2", "мамин вемон");
-    setText("MOS.Settings.Modules.Mod3", "вене;п мивам");
-    setText("MOS.Settings.Modules.Mod4", "вемон мивам");
-    setText("MOS.Settings.Modules.Mod5", "патан миШен;пе");
-    setText("MOS.Appstore.Music.Text.1", "вемим");
-    setText("MOS.Music.Song.Stop", "патин вемим");
-    setText("MOS.Settings.OOSErr.Background", "мамин вемон;п (нена)");
-    setText("MOS.Settings.OOSManager.Background", "мамин вемон;п (нена)");
-    setText("MOS.Settings.OOS.Background", "мамин вемон;п (нена)");
-    setText("MOS.Settings.OOSS1.Background", "мамин вемон;п (нена)");
-    setText("MOS.Appstore.Background", "мивам нини");
-    setText("MOS.Appstore.Music.Text.1", "вемим");
-    setText("MOS.Music.Background", "вемим");
-    setText("MOS.Settings.Background", "вене;п");
-  } else if (id == 5) {
-    //[зъ тъзюэбъ] 
-    setText("MOS.Settings.Languages.Background", "{ж;зъ}");//Languages
-    setText("MOS.Settings.Advanced.Button.4", "{ж;зъ}");//Languages
-    setText("MOS.Settings.Button.1", "{ж;бэлъзвдп}");//Wallpapers
-    setText("MOS.Settings.Wallpapers.Background", "{ж;бэлъзвдп}");//wallpapers
-    setText("MOS.Settings.Modules.Mod1", "{ж;бэлъзвдп}");//Wallpapers
-    setText("MOS.Settings.Button.2", "{фэтх}");//about 
-    setText("MOS.Settings.Button.3", "{фдпбъ}");//advanced
-    setText("MOS.Settings.Advanced.Button.1", "{чдзбд;эьэбхп фдпбъ}");//Advanced customization
-    setText("MOS.Settings.Customizer.Background", "{дпбшюдюш;эьэбхп}");//customizer
-    setText("MOS.Settings.Customizer.Label.1", "{дфэюэвх бх}");//icon scale
-    setText("MOS.Settings.Customizer.Label.3", "{дфэюэвх вдцхзп}");//icon size
-    setText("MOS.Settings.Customizer.Label.2", "{чдз вдцхзп}");//icon color
-    setText("MOS.Settings.Modules.Background", "{ж;цдзфэз}");//modules
-    setText("MOS.Settings.Advanced.Background", "ж:ндьхпз бъюдзз");//developer options
-    setText("MOS.Settings.Advanced.Button.3", "{ж;цдзфэз}");//modules
-    setText("MOS.Settings.Modules.Mod3", "{дпбшюдюш;эьэбхп}");//customizer
-    setText("MOS.Settings.Modules.Mod4", "System process");//system process
-    setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
-    setText("MOS.Settings.Modules.Mod2", "[OOS]");//OOS
-    setText("MOS.Settings.Advanced.Button.2", "{яътш ндядп}");//Other OS
-    setText("MOS.Settings.Background", "{ж;ндьхпз}");//settings
-    setText("MOS.Appstore.Background", "{ьшззбшзз вдцхзп}");//app store
-    setText("MOS.Appstore.Music.Text.1", "{фхзтдчэп}");//music
-    setText("MOS.Appstore.Paint.Text.1", "{вдбдз}");//paint
-    setText("MOS.Appstore.Notes.Text.1", "{цдзз;цдзз}");//notes
-    setText("MOS.Notes.text.1", "{цдзз;цдзз}");//notes
-    setText("MOS.Music.Song.Stop", "{фхзтдчэп яэях}");//stop music
-    setText("MOS.Music.Background", "{фхзтдчэп}");//music
-  } else if (id == 6) {
-    //Phonemic English
-    setText("MOS.Settings.Languages.Background", "Lāŋwajes");//Languages
-    setText("MOS.Settings.Advanced.Button.4", "Lāŋwajes");//Languages
-    setText("MOS.Settings.Button.1", "WälpāpŘs");//Wallpapers
-    setText("MOS.Settings.Wallpapers.Background", "WälpāpŘs");//wallpapers
-    setText("MOS.Settings.Modules.Mod1", "WälpāpŘs");//Wallpapers
-    setText("MOS.Settings.Button.2", "àbowt");//about 
-    setText("MOS.Settings.Button.3", "Ädvansd");//advanced
-    setText("MOS.Settings.Advanced.Button.1", "Ädvansd Kușomezāßõn");//Advanced customization
-    setText("MOS.Settings.Customizer.Background", "KușomizŘ");//customizer
-    setText("MOS.Settings.Customizer.Label.1", "Tëkș Skāl");//icon scale
-    setText("MOS.Settings.Customizer.Label.3", "Ikon Siz");//icon size
-    setText("MOS.Settings.Customizer.Label.2", "Ikon CõlŘ");//icon color
-    setText("MOS.Settings.Modules.Background", "Mädulz");//modules
-    setText("MOS.Settings.Advanced.Background", "DëvëlëpŘ Äpßõns");//developer options
-    setText("MOS.Settings.Advanced.Button.3", "Mädulz");//modules
-    setText("MOS.Settings.Modules.Mod3", "KușomizŘ");//customizer
-    setText("MOS.Settings.Modules.Mod4", "System process"); //system process
-    setText("MOS.Settings.Modules.Mod5", "Module finder"); //module finder
-    setText("MOS.Settings.Modules.Mod2", "OOS"); //OOS
-    setText("MOS.Settings.Advanced.Button.2", "Other OS"); //Other OS
-    setText("MOS.Settings.Background", "Settings"); //settings
-    setText("MOS.Appstore.Background", "App Store"); //app store
-    setText("MOS.Appstore.Music.Text.1", "Muzek");//music
-    setText("MOS.Appstore.Paint.Text.1", "Paint");//paint
-    setText("MOS.Appstore.Notes.Text.1", "Notes");//notes
-    setText("MOS.Notes.text.1", "Notes");//notes
-    setText("MOS.Music.Song.Stop", "Stop Muzek");//stop music
-    setText("MOS.Music.Background", "Muzek");//music
-  } else {
-    
-  }
+//eng
+var lang0 = ["Languages", "Wallpapers", "About", "Advanced", "Advanced Customization", "Customizer", "Icon Scale", "Icon Size", "Icon Color", "Modules", "Other OS", "Settings", "meow", "meow", "Developer Options", "App Store", "Music", "Paint", "Notes", "Stop Music"];
+//filipino
+var lang1 = ["Mga Wika", "Mga Wallpaper", "Tungkol sa", "Advanced", "Advanced na Pag-customize", "Customizer", "Icon Scale", "Laki ng Icon", "Kulay ng Icon", "Mga Module", "Iba pa OS", "Mga Setting", "meow", "meow", "Developer Options", "App Store", "Music", "Paint", "Notes", "Stop Music"];
+//shavian
+var lang2 = ["𐑤𐑨𐑙𐑜𐑢𐑦𐑡𐑩𐑟", "𐑢𐑷𐑤𐑐𐑱𐑐𐑼𐑟", "𐑩𐑚𐑬𐑑", "𐑩𐑛𐑝𐑨𐑯𐑕𐑑", "𐑩𐑛𐑝𐑨𐑯𐑕𐑑 ·𐑒𐑳𐑕𐑑𐑩𐑥𐑦𐑟𐑱𐑖𐑩𐑯", "𐑒𐑳𐑕𐑑𐑩𐑥𐑲𐑟𐑼", "𐑲𐑒𐑪𐑯 ·𐑕𐑒𐑱𐑤", "𐑲𐑒𐑪𐑯 ·𐑕𐑲𐑟", "𐑲𐑒𐑪𐑯 ·𐑒𐑳𐑤𐑼", "𐑥𐑪𐑡𐑵𐑤𐑟", "𐑳𐑞𐑼 ·𐑴𐑕", "𐑕𐑧𐑑𐑦𐑙𐑟", "𐑥𐑰𐑬", "𐑥𐑰𐑬", "𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼 ·𐑪𐑐𐑖𐑩𐑯𐑟", "𐑨𐑐 ·𐑕𐑑𐑹", "𐑥𐑿𐑟𐑦𐑒", "𐑐𐑱𐑯𐑑", "𐑯𐑴𐑑𐑕", "𐑕𐑑𐑪𐑐 ·𐑥𐑿𐑟𐑦𐑒"];
+if (id == 0) {
+setText("MOS.Settings.Languages.Background", lang0[0]);//Languages
+setText("MOS.Settings.Advanced.Button.4", lang0[0]);//Language
+setText("MOS.Settings.Button.1", lang0[1]);//Wallpapers
+setText("MOS.Settings.Wallpapers.Background", lang0[1]);//wallpapers
+setText("MOS.Settings.Modules.Mod1", lang0[1]);//Wallpapers
+setText("MOS.Settings.Button.2", lang0[2]);//about 
+setText("MOS.Settings.Button.3", lang0[3]);//advanced
+setText("MOS.Settings.Advanced.Button.1", lang0[4]);//Advanced customization
+setText("MOS.Settings.Customizer.Background", lang0[5]);//customizer
+setText("MOS.Settings.Customizer.Label.1", lang0[6]);//icon scale
+setText("MOS.Settings.Customizer.Label.3", lang0[7]);//icon size
+setText("MOS.Settings.Customizer.Label.2", lang0[8]);//icon color
+setText("MOS.Settings.Modules.Background", lang0[9]);//modules
+setText("MOS.Settings.Advanced.Background", lang0[14]);//developer options
+setText("MOS.Settings.Advanced.Button.3", lang0[9]);//modules
+setText("MOS.Settings.Modules.Mod3", lang0[5]);//customizer
+setText("MOS.Settings.Modules.Mod4", lang0[12]);//system process
+setText("MOS.Settings.Modules.Mod5", lang0[13]);//module finder
+setText("MOS.Settings.Modules.Mod2", lang0[10]);//OOS
+setText("MOS.Settings.Advanced.Button.2", lang0[10]);//Other OS
+setText("MOS.Settings.Background", lang0[11]);//settings
+setText("MOS.Appstore.Background", lang0[15]);//app store
+setText("MOS.Appstore.Music.Text.1", lang0[16]);//music
+setText("MOS.Appstore.Paint.Text.1", lang0[17]);//paint
+setText("MOS.Appstore.Notes.Text.1", lang0[18]);//notes
+setText("MOS.Notes.text.1", lang0[18]);//notes
+setText("MOS.Music.Song.Stop", lang0[19]);//stop music
+setText("MOS.Music.Background", lang0[16]);//music
+}
+if (id == 1) {
+setText("MOS.Settings.Languages.Background", lang1[0]);//Languages
+setText("MOS.Settings.Advanced.Button.4", lang1[0]);//Language
+setText("MOS.Settings.Button.1", lang1[1]);//Wallpapers
+setText("MOS.Settings.Wallpapers.Background", lang1[1]);//wallpapers
+setText("MOS.Settings.Modules.Mod1", lang1[1]);//Wallpapers
+setText("MOS.Settings.Button.2", lang1[2]);//about 
+setText("MOS.Settings.Button.3", lang1[3]);//advanced
+setText("MOS.Settings.Advanced.Button.1", lang1[4]);//Advanced customization
+setText("MOS.Settings.Customizer.Background", lang1[5]);//customizer
+setText("MOS.Settings.Customizer.Label.1", lang1[6]);//icon scale
+setText("MOS.Settings.Customizer.Label.3", lang1[7]);//icon size
+setText("MOS.Settings.Customizer.Label.2", lang1[8]);//icon color
+setText("MOS.Settings.Modules.Background", lang1[9]);//modules
+setText("MOS.Settings.Advanced.Background", lang1[14]);//developer options
+setText("MOS.Settings.Advanced.Button.3", lang1[9]);//modules
+setText("MOS.Settings.Modules.Mod3", lang1[5]);//customizer
+setText("MOS.Settings.Modules.Mod4", lang1[12]);//system process
+setText("MOS.Settings.Modules.Mod5", lang1[13]);//module finder
+setText("MOS.Settings.Modules.Mod2", lang1[10]);//OOS
+setText("MOS.Settings.Advanced.Button.2", lang1[10]);//Other OS
+setText("MOS.Settings.Background", lang1[11]);//settings
+setText("MOS.Appstore.Background", lang1[15]);//app store
+setText("MOS.Appstore.Music.Text.1", lang1[16]);//music
+setText("MOS.Appstore.Paint.Text.1", lang1[17]);//paint
+setText("MOS.Appstore.Notes.Text.1", lang1[18]);//notes
+setText("MOS.Notes.text.1", lang1[18]);//notes
+setText("MOS.Music.Song.Stop", lang1[19]);//stop music
+setText("MOS.Music.Background", lang1[16]);//music
+}
+if (id == 2) {
+setText("MOS.Settings.Languages.Background", lang2[0]);//Languages
+setText("MOS.Settings.Advanced.Button.4", lang2[0]);//Language
+setText("MOS.Settings.Button.1", lang2[1]);//Wallpapers
+setText("MOS.Settings.Wallpapers.Background", lang2[1]);//wallpapers
+setText("MOS.Settings.Modules.Mod1", lang2[1]);//Wallpapers
+setText("MOS.Settings.Button.2", lang2[2]);//about 
+setText("MOS.Settings.Button.3", lang2[3]);//advanced
+setText("MOS.Settings.Advanced.Button.1", lang2[4]);//Advanced customization
+setText("MOS.Settings.Customizer.Background", lang2[5]);//customizer
+setText("MOS.Settings.Customizer.Label.1", lang2[6]);//icon scale
+setText("MOS.Settings.Customizer.Label.3", lang2[7]);//icon size
+setText("MOS.Settings.Customizer.Label.2", lang2[8]);//icon color
+setText("MOS.Settings.Modules.Background", lang2[9]);//modules
+setText("MOS.Settings.Advanced.Background", lang2[14]);//developer options
+setText("MOS.Settings.Advanced.Button.3", lang2[9]);//modules
+setText("MOS.Settings.Modules.Mod3", lang2[5]);//customizer
+setText("MOS.Settings.Modules.Mod4", lang2[12]);//system process
+setText("MOS.Settings.Modules.Mod5", lang2[13]);//module finder
+setText("MOS.Settings.Modules.Mod2", lang2[10]);//OOS
+setText("MOS.Settings.Advanced.Button.2", lang2[10]);//Other OS
+setText("MOS.Settings.Background", lang2[11]);//settings
+setText("MOS.Appstore.Background", lang2[15]);//app store
+setText("MOS.Appstore.Music.Text.1", lang2[16]);//music
+setText("MOS.Appstore.Paint.Text.1", lang2[17]);//paint
+setText("MOS.Appstore.Notes.Text.1", lang2[18]);//notes
+setText("MOS.Notes.text.1", lang2[18]);//notes
+setText("MOS.Music.Song.Stop", lang2[19]);//stop music
+setText("MOS.Music.Background", lang2[16]);//music
+}
+
 }
 function installapp(appname, iconn) {
   for (var i = 0; i < icons.length; i++) {
